@@ -2,14 +2,34 @@ from playwright.sync_api import sync_playwright
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
+import json
+import sys
+
 
 # Load credentials from .env
-load_dotenv()
-USERNAME = os.getenv("SB_USERNAME")
-PASSWORD = os.getenv("SB_PASSWORD")
+# load_dotenv()
+# USERNAME = os.getenv("SB_USERNAME")
+# PASSWORD = os.getenv("SB_PASSWORD")
 
 # Set your fixed availability time
-Y_TIME = "11:00 AM"
+
+user_id = sys.argv[1] if len(sys.argv) > 1 else None
+if not user_id:
+    print("❌ No user ID provided.")
+    sys.exit(1)
+
+# Load all credentials
+with open("users.json", "r") as f:
+    users = json.load(f)
+
+# Get credentials for this user
+if user_id not in users:
+    print("❌ User ID not found in users.json.")
+    sys.exit(1)
+
+USERNAME = users[user_id]["username"]
+PASSWORD = users[user_id]["password"]
+
 
 def main():
     with sync_playwright() as p:

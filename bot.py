@@ -50,7 +50,7 @@ async def geervan_command(interaction: discord.Interaction):
 async def clean_command(interaction: discord.Interaction):
     await interaction.response.send_message("🧹 Running cleaning script... Please wait.", )
     try:
-        subprocess.run(["python", "main.py"], timeout=120)
+        subprocess.run(["python", "main.py", str(interaction.user.id)], timeout=120)
         await interaction.followup.send("✅ Cleaning script triggered.")
     except Exception as e:
         await interaction.followup.send("❌ Failed to run the script.")
