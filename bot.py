@@ -5,6 +5,8 @@ import subprocess
 from dotenv import load_dotenv
 import random
 from PIL import Image
+from flask import Flask
+from threading import Thread
 # Load environment variables
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -85,6 +87,21 @@ async def attendance_command(interaction: discord.Interaction):
     except Exception as e:
         await interaction.followup.send("⚠️ Failed to send screenshot.")
         print(f"Error deleting screenshot: {e}")
+
+app = Flask('')    
+@app.route('/')
+def home():
+    return "I'm alive!"
+
+def run():
+  app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
+# Run bot
+keep_alive()
 
 # Run bot
 client.run(DISCORD_TOKEN)
